@@ -36,15 +36,12 @@ public class WekaClassification {
 				int[][] distMatrix = FloydWarshall.floydWarshall(graph);
 				shortMatrix.add(distMatrix);
 				int tmpMax = findMax(distMatrix);
-				System.out.println(tmpMax);
 				if(tmpMax > maxPath){
 					maxPath = tmpMax;
 				}
 			}
-			System.out.println(maxPath);
 			
 			Matrix sp = new Matrix((int)(maxPath+1), graphs.size());
-			System.out.println(sp.getRowDimension() + " " + sp.getColumnDimension());
 			for(int i=0; i<maxPath+1; i++)
 				for(int j=0; j<graphs.size(); j++)
 					sp.set(i, j, 0);

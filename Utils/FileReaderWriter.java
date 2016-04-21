@@ -18,7 +18,6 @@ public class FileReaderWriter {
 		for(File file : listOfFile){
 			if(file.isFile()){
 				String filename = path + file.getName();
-//				System.out.println(filename);
 				ArrayList<ArrayList<Integer>> complete = new ArrayList<ArrayList<Integer>>();
 				BufferedReader br = new BufferedReader(new FileReader(filename));
 				String line = null;
