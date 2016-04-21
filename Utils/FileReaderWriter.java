@@ -18,7 +18,7 @@ public class FileReaderWriter {
 		for(File file : listOfFile){
 			if(file.isFile()){
 				String filename = path + file.getName();
-				System.out.println(filename);
+//				System.out.println(filename);
 				ArrayList<ArrayList<Integer>> complete = new ArrayList<ArrayList<Integer>>();
 				BufferedReader br = new BufferedReader(new FileReader(filename));
 				String line = null;
@@ -33,11 +33,11 @@ public class FileReaderWriter {
 				}
 				br.close();
 								
-				int[][] tmp = new int[complete.size()][complete.get(0).size()];
-				for(int i=0; i<complete.size(); i++){
-					for(int j=0; j<complete.get(i).size(); j++)
+				int[][] tmp = new int[complete.size()][complete.size()];
+				for(int i=0; i<complete.size(); i++)
+					for(int j=0; j<complete.size(); j++)
 						tmp[i][j] = complete.get(i).get(j);
-				}
+				
 				retMatrix.add(tmp);
 			}
 		}

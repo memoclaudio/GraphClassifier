@@ -5,26 +5,30 @@ import weka.classifiers.evaluation.Evaluation;
 import weka.classifiers.functions.SMO;
 import weka.core.Instances;
 import weka.core.converters.ConverterUtils.DataSource;
+import weka.filters.Filter;
+import weka.filters.unsupervised.attribute.NumericToNominal;
 
 public class MainClass {
 
 	public static void main(String[] args) {
 		try {
-			String instancesPath = "";
-			String graphDir = "";
-			double C=1;
-			double epsilon = 0.001;
+			String instancesPath = args[0];
+			String graphDir = args[1];
+			double C=1.0;
+			double epsilon = 1.0E-12;
 			
 			DataSource source;
 			source = new DataSource(instancesPath);
 
 			Instances data = source.getDataSet();
+			NumericToNominal filter = new NumericToNominal();
+			filter.setInputFormat(data);
+			data = Filter.useFilter(data, filter);
 			data.setClassIndex(data.numAttributes()-1);
 			
-			WekaClassification.buildKernel("/Users/stamile/Dropbox/AMSEP_connect/Matrices/new/");
 			SMO smo = WekaClassification.generateClassifier(data, graphDir, C, epsilon);
 			Evaluation eval = new Evaluation(data);
-			eval.crossValidateModel(smo, data, 10, new Random(1));
+			eval.crossValidateModel(smo, data, data.numInstances(), new Random(0));
 			System.out.println(eval.toSummaryString("\nResults\n======\n", false));
 
 		} catch (Exception e) {
