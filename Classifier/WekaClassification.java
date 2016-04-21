@@ -8,26 +8,21 @@ import Utils.FileReaderWriter;
 import weka.classifiers.functions.SMO;
 import weka.classifiers.functions.supportVector.PrecomputedKernelMatrixKernel;
 import weka.core.Instances;
-import weka.core.converters.ConverterUtils.DataSource;
 
 public class WekaClassification {
-
-	private SMO smo;
 	
-	public WekaClassification(String instancesPath, String graphsDirectory, double C, double epsilon) throws Exception{
-		 DataSource source = new DataSource(instancesPath);
-		 Instances data = source.getDataSet();
-		 data.setClassIndex(data.numAttributes()-1);
+	public static SMO generateClassifier(Instances data, String graphsDirectory, double C, double epsilon) throws Exception{
 
-		 String tmpFile = buildKernel(graphsDirectory);
-		 
-		 PrecomputedKernelMatrixKernel kernel = new PrecomputedKernelMatrixKernel();
-		 kernel.setKernelMatrixFile(new File(tmpFile));
-		 smo = new SMO();
-		 smo.setKernel(kernel);
-		 smo.setC(C);
-		 smo.setEpsilon(epsilon);
-		 smo.buildClassifier(data);
+		String tmpFile = buildKernel(graphsDirectory);
+
+		PrecomputedKernelMatrixKernel kernel = new PrecomputedKernelMatrixKernel();
+		kernel.setKernelMatrixFile(new File(tmpFile));
+		SMO smo = new SMO();
+		smo.setKernel(kernel);
+		smo.setC(C);
+		smo.setEpsilon(epsilon);
+		smo.buildClassifier(data);
+		return smo;
 	}
 	
 	
@@ -39,8 +34,7 @@ public class WekaClassification {
 			int maxPath = 0;
 			int minPath = Integer.MAX_VALUE;
 			for(int[][] graph : graphs){
-				FloydWarshall floyd = new FloydWarshall(graph);
-				int[][] distMatrix = floyd.floydWarshall();
+				int[][] distMatrix = FloydWarshall.floydWarshall(graph,true);
 				shortMatrix.add(distMatrix);
 				int tmpMax = findMax(distMatrix);
 				int tmpMin = findMin(distMatrix);
@@ -49,9 +43,6 @@ public class WekaClassification {
 				if(tmpMin < minPath)
 					minPath = tmpMin;
 			}
-			System.out.println(maxPath + " " + minPath);
-			
-			System.out.println(maxPath+1 + " " + graphs.size());
 			
 			Matrix sp = new Matrix((int)(maxPath+1), graphs.size());
 			for(int i=0; i<maxPath+1; i++)
@@ -68,7 +59,7 @@ public class WekaClassification {
 				}
 			}
 			Matrix kernel = sp.transpose().times(sp);
-			FileReaderWriter.writeFile(filename, kernel);
+			FileReaderWriter.writeKernel(filename, kernel);
 		} catch (IOException e) {
 			System.out.println("File not found");
 			e.printStackTrace();

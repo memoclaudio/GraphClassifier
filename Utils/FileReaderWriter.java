@@ -45,7 +45,7 @@ public class FileReaderWriter {
 		return retMatrix;
 	}
 	
-	public static void writeFile(String filename, Matrix matrix) throws FileNotFoundException{
+	public static void writeKernel(String filename, Matrix matrix) throws FileNotFoundException{
 		int n = matrix.getRowDimension();
 		int m = matrix.getColumnDimension();
 		PrintWriter writer = new PrintWriter(filename);
@@ -58,27 +58,5 @@ public class FileReaderWriter {
 		}
 		writer.close();
 	}
-	
-//	public static double[][] readInitMatrix(String filename) throws NumberFormatException, IOException{
-//		ArrayList<ArrayList<Double> > retVal = new ArrayList<ArrayList<Double> >();
-//		BufferedReader br = new BufferedReader(new FileReader(filename));
-//		String line = null;
-//		while((line = br.readLine()) != null){
-//			ArrayList<Double> tmp = new ArrayList<Double>();
-//			String[] field = line.split(" ");
-//			for(int i=0; i<field.length; i++){
-//				double current = Double.parseDouble(field[i]);
-//				tmp.add(current);
-//			}
-//			retVal.add(tmp);
-//		}
-//		br.close();
-//		double[][] finalMatrix = new double[retVal.size()][];
-//		for(int i=0; i<retVal.size(); i++)
-//			finalMatrix[i] = new double[retVal.get(i).size()];
-//		for(int i=0; i<retVal.size(); i++)
-//			for(int j=0; j<retVal.get(i).size(); j++)
-//				finalMatrix[i][j] = retVal.get(i).get(j);
-//		return finalMatrix;
-//	}
+
 }
